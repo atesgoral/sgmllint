@@ -2,36 +2,46 @@ var sgmllint = require("../sgmllint");
 
 exports.sgmllint = {
     testEmpty: function (test) {
-        sgmllint("");
+        sgmllint('');
         test.done();
     },
     testText: function (test) {
-        sgmllint("Hello");
+        sgmllint('Hello');
         test.done();
     },
     element: {
         testMatchedClosing: function (test) {
-            sgmllint("<foo></foo>");
+            sgmllint('<foo></foo>');
             test.done();
         },
         testUnmatchedClosing: function (test) {
             test.throws(function () {
-                sgmllint("<foo></bar>");
+                sgmllint('<foo></bar>');
             });
             test.done();
         },
         testMissingClosing: function (test) {
             test.throws(function () {
-                sgmllint("<foo>");
+                sgmllint('<foo>');
             });
             test.done();
         },
         testWithText: function (test) {
-            sgmllint("<foo>Hello</foo>");
+            sgmllint('<foo>Hello</foo>');
             test.done();
         },
         testWithChild: function (test) {
-            sgmllint("<foo><bar></bar></foo>");
+            sgmllint('<foo><bar></bar></foo>');
+            test.done();
+        }
+    },
+    attribute: {
+        testWithoutValue: function (test) {
+            sgmllint('<foo a></foo>');
+            test.done();
+        },
+        testWithValue: function (test) {
+            sgmllint('<foo a="1"></foo>');
             test.done();
         }
     }
