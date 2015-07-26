@@ -15,5 +15,11 @@
   "homepage": "https://github.com/atesgoral/sgmllint",
   "dependencies": {
     "array.from": "^0.2.0"
+  },
+  "devDependencies": {
+    "nodeunit": "^0.9.1"
+  },
+  "scripts": {
+    "test": "nodeunit"
   }
 }
