@@ -25,6 +25,14 @@ exports.sgmllint = {
                 sgmllint("<foo>");
             });
             test.done();
+        },
+        testWithText: function (test) {
+            sgmllint("<foo>Hello</foo>");
+            test.done();
+        },
+        testWithChild: function (test) {
+            sgmllint("<foo><bar></bar></foo>");
+            test.done();
         }
     }
 };
