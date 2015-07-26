@@ -1,0 +1,19 @@
+{
+  "name": "sgmllint",
+  "version": "0.0.0",
+  "description": "Unforgiving SGML linter",
+  "main": "sgmllint.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/atesgoral/sgmllint.git"
+  },
+  "author": "Ates Goral <ates@magnetiq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/atesgoral/sgmllint/issues"
+  },
+  "homepage": "https://github.com/atesgoral/sgmllint",
+  "dependencies": {
+    "array.from": "^0.2.0"
+  }
+}
