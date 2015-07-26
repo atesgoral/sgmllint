@@ -2,6 +2,12 @@ require("array.from");
 
 var whitespace = /\s/;
 
+function assert(cond, message) {
+    if (!cond) {
+        throw new Error(message);
+    }
+}
+
 function Text() {
     var s = "";
 
@@ -22,9 +28,19 @@ function ElementName() {
     this.process = function (c) {
         if (whitespace.test(c)) {
             console.log("ElementName", s);
+            if (s.charAt(0) === "/") {
+                assert(s.substr(1) === elementStack.pop(), "Unmatched closing element: <" + s + ">");
+            } else {
+                elementStack.push(s);
+            }
             return new AttributeName();
         } else if (c === ">") {
             console.log("ElementName", s);
+            if (s.charAt(0) === "/") {
+                assert(s.substr(1) === elementStack.pop(), "Unmatched closing element: <" + s + ">");
+            } else {
+                elementStack.push(s);
+            }
             return new Text();
         } else {
             s += c;
@@ -75,7 +91,8 @@ var raw = '<foo a="1" b="2">Hello<bar>World</bar></foo>';
 console.log("raw", raw);
 
 var charList = Array.from(raw),
-    state = new Text();
+    state = new Text(),
+    elementStack = [];
 
 while (charList.length) {
     state = state.process(charList.shift());
