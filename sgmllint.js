@@ -86,4 +86,6 @@ module.exports = function (raw) {
     while (charList.length) {
         state = state.process(charList.shift());
     }
+
+    assert(elementStack.length === 0, "Unclosed element: " + elementStack.pop());
 };

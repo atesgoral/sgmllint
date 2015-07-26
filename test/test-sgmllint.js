@@ -19,6 +19,12 @@ exports.sgmllint = {
                 sgmllint("<foo></bar>");
             });
             test.done();
+        },
+        testMissingClosing: function (test) {
+            test.throws(function () {
+                sgmllint("<foo>");
+            });
+            test.done();
         }
     }
 };
