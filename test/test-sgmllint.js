@@ -9,23 +9,23 @@ exports.sgmllint = {
         sgmllint('Hello');
         test.done();
     },
-    element: {
-        testMatchedClosing: function (test) {
-            sgmllint('<foo></foo>');
-            test.done();
-        },
-        testUnmatchedClosing: function (test) {
-            test.throws(function () {
-                sgmllint('<foo></bar>');
-            });
-            test.done();
-        },
-        testMissingClosing: function (test) {
-            test.throws(function () {
-                sgmllint('<foo>');
-            });
-            test.done();
-        },
+    tag: {
+        // testMatchedClosing: function (test) {
+        //     sgmllint('<foo></foo>');
+        //     test.done();
+        // },
+        // testUnmatchedClosing: function (test) {
+        //     test.throws(function () {
+        //         sgmllint('<foo></bar>');
+        //     });
+        //     test.done();
+        // },
+        // testMissingClosing: function (test) {
+        //     test.throws(function () {
+        //         sgmllint('<foo>');
+        //     });
+        //     test.done();
+        // },
         testWithText: function (test) {
             sgmllint('<foo>Hello</foo>');
             test.done();
@@ -36,13 +36,13 @@ exports.sgmllint = {
         }
     },
     attribute: {
-        testWithoutValue: function (test) {
-            sgmllint('<foo a></foo>');
-            test.done();
-        },
-        testWithValue: function (test) {
-            sgmllint('<foo a="1"></foo>');
-            test.done();
-        }
+        // testWithoutValue: function (test) {
+        //     sgmllint('<foo a></foo>');
+        //     test.done();
+        // },
+        // testWithValue: function (test) {
+        //     sgmllint('<foo a="1"></foo>');
+        //     test.done();
+        // }
     }
 };

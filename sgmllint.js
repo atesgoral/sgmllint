@@ -1,91 +1,75 @@
 require("array.from");
 
 module.exports = function (raw) {
-    var whitespace = /\s/;
+    var state;
+
+    function setState(newState) {
+        state = {
+            name: newState,
+            start: current,
+            line: line,
+            column: column
+        };
+    }
 
     function assert(cond, message) {
         if (!cond) {
-            throw new Error(message);
+            throw new Error(message); // @todo include state.line and state.column
         }
     }
 
-    function Text() {
-        var s = "";
-
-        this.process = function (c) {
+    var stateHandlerMap = {
+        text: function (c) {
             if (c === "<") {
-                return new ElementName();
-            } else {
-                s += c;
-                return this;
+                setState("tag");
             }
-        };
-    }
-
-    function ElementName() {
-        var s = "";
-
-        this.process = function (c) {
+        },
+        tag: function (c) {
+            if (c === "/") {
+                setState("closing_tag");
+            } else {
+                assert(tagNameFirstChar.test(c), "Invalid first character in tag name");
+                setState("opening_tag");
+            }
+        },
+        opening_tag: function (c) {
             if (whitespace.test(c)) {
-                if (s.charAt(0) === "/") {
-                    assert(s.substr(1) === elementStack.pop(), "Unmatched closing element: <" + s + ">");
-                } else {
-                    elementStack.push(s);
-                }
-                return new AttributeName();
-            } else if (c === ">") {
-                if (s.charAt(0) === "/") {
-                    assert(s.substr(1) === elementStack.pop(), "Unmatched closing element: <" + s + ">");
-                } else {
-                    elementStack.push(s);
-                }
-                return new Text();
+                setState("attributes");
             } else {
-                s += c;
-                return this;
+                assert(tagNameChar.test(c), "Invalid character in tag name");
             }
-        };
-    }
+        },
+        closing_tag: function (c) {
+            if (c === ">") {
 
-    function AttributeName() {
-        var s = "";
-
-        this.process = function (c) {
-            if (whitespace.test(c)) {
-                return new AttributeName();
-            } else if (c === ">") {
-                return new Text();
-            } else if (c === "=") {
-                return new AttributeValue();
+                setState("text");
             } else {
-                s += c;
-                return this;
-            }
-        };
-    }
 
-    function AttributeValue() {
-        var s = "";
-
-        this.process = function (c) {
-            if (whitespace.test(c)) {
-                return new AttributeName();
-            } else if (c === ">") {
-                return new Text();
-            } else {
-                s += c;
-                return this;
             }
-        };
-    }
+        },
+        attributes: function (c) {
+
+        }
+    };
+
+    setState("text");
 
     var charList = Array.from(raw),
-        state = new Text(),
-        elementStack = [];
+        current = 0,
+        line = 1,
+        column = 1,
+        c;
 
-    while (charList.length) {
-        state = state.process(charList.shift());
+    while (current < charList.length) {
+        c = charList[current];
+
+        if (/\n/.test(c)) {
+            line++;
+            column = 1;
+        }
+
+        stateHandlerMap[state.name](c);
+
+        current++;
     }
-
-    assert(elementStack.length === 0, "Unclosed element: " + elementStack.pop());
 };
